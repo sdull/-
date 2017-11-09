@@ -1,12 +1,29 @@
 package Analasyis;
-//hjgijhfhjdfghd
+
 import java.io.IOException;
 
 public class BMPREAD {
-    private String path = "D://iamges";
 
-    public BMPREAD(String path){
+    private String path = "D://iamges";
+    private int[] imcont;
+    private int[] bftype = new int[2];
+    private int[] bfsize = new int[4];
+    private int[] bfoffbits = new int[4];
+    private int[] bisize = new int[4];
+    private int[] biwidth = new int[4];
+    private int[] biheight = new int[4];
+    private int[] biplanes = new int[2];
+    private int[] bibitcount = new int[2];
+    private int[] bicompression = new int[4];
+    private int[] bisizeimage = new int[4];
+    private int[] biXpelspermeter = new int[4];
+    private int[] biYpelspermeter = new int[4];
+    private int[] biclrused = new int[4];
+    private int[] biclrimportant = new int[4];
+
+    public BMPREAD(String path) throws IOException {
         this.path=path;
+        this.imcont=readbmp();
     }
     public int[] readbmp() throws IOException{
         java.io.FileInputStream fin = new java.io.FileInputStream(this.path);
