@@ -1,5 +1,5 @@
 package Analasyis;
-
+//hjgijhfhjdfghd
 import java.io.IOException;
 
 public class BMPREAD {
