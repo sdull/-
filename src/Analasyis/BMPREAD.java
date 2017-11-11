@@ -20,7 +20,7 @@ public class BMPREAD {
     private int[] biYpelspermeter = new int[4];
     private int[] biclrused = new int[4];
     private int[] biclrimportant = new int[4];
-    private int[] rgbs;
+    private int[] rgbdata;
 
     public BMPREAD(String path) throws IOException {
         this.path=path;
@@ -29,7 +29,7 @@ public class BMPREAD {
     public void readbmp() throws IOException{
         java.io.FileInputStream fin = new java.io.FileInputStream(this.path);
         java.io.BufferedInputStream bis = new java.io.BufferedInputStream(fin);
-        byte[] imcon = new byte[25600000];
+        byte[] imcon = new byte[1024600000];
         bis.read(imcon);
         this.imconr = new int[imcon.length];
         for (int i=0;i<this.imconr.length;i++){
@@ -64,7 +64,27 @@ public class BMPREAD {
         System.arraycopy(this.imconr,50,biclrimportant,0,4);
     }
 
-    public int get_bftype(){
-        return dataconvert(this.bftype);
+    public int get_bftype(){ return dataconvert(this.bftype);}
+    public int get_bfsize(){return dataconvert(this.bfsize);}
+    public int get_bfoffbits(){return dataconvert(this.bfoffbits);}
+    public int get_bisize(){return dataconvert(this.bisize);}
+    public int get_biwidth(){return dataconvert(this.biwidth);}
+    public int get_biheight(){return dataconvert(this.biheight);}
+    public int get_biplanes(){return dataconvert(this.biplanes);}
+    public int get_bibitcount(){return dataconvert(this.bibitcount);}
+    public int get_bicompression(){return dataconvert(this.bicompression);}
+    public int get_bisizeimage(){return dataconvert(this.bisizeimage);}
+    public int get_biXpelspermeter(){return dataconvert(this.biXpelspermeter);}
+    public int get_biYpelspermeter(){return dataconvert(this.biYpelspermeter);}
+    public int get_biclrused(){return dataconvert(this.biclrused);}
+    public int get_biclrimportant(){return dataconvert(this.biclrimportant);}
+
+    public void get_rgbdata(){
+        int width = get_biwidth();int height = get_biheight();
+        int scanbyte = ((width * height + 31) >> 5) << 2;
+        this.rgbdata = new int[get_bfsize()-54];
+        System.arraycopy(this.imconr,53,rgbdata,0,this.rgbdata.length);
+        int[][] clrR;int[][] clrG;int[][] clrB;
+
     }
 }
