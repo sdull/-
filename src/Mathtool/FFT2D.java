@@ -76,31 +76,31 @@ public class FFT2D {
     }
 
 
-    public static void main(String[] args) {
-        int N = Integer.parseInt(args[0]);
-        Complex[][] x = new Complex[N][N];
-
-        // original data
-        for (int i = 0; i < N; i++)
-            for(int j=0;j<N;j++)
-                x[i][j] = new Complex(i, j);
-        show(x, "x");
-
-        long starTime=System.currentTimeMillis();
-        long Time=0;
-        // FFT of original data
-        Complex[][] y = fft2d(x);
-        show(y, "y = fft(x)");
-
-        long endTime=System.currentTimeMillis();
-        Time=endTime-starTime;
-        System.out.println(Time);
-
-        // take inverse FFT
-        Complex[][] z = ifft2d(y);
-        show(z, "z = ifft(y)");
-        endTime=System.currentTimeMillis();
-        Time=endTime-starTime;
-        System.out.println(Time);
-    }
+//    public static void main(String[] args) {
+//        int N = Integer.parseInt(args[0]);
+//        Complex[][] x = new Complex[N][N];
+//
+//        // original data
+//        for (int i = 0; i < N; i++)
+//            for(int j=0;j<N;j++)
+//                x[i][j] = new Complex(i, j);
+//        show(x, "x");
+//
+//        long starTime=System.currentTimeMillis();
+//        long Time=0;
+//        // FFT of original data
+//        Complex[][] y = fft2d(x);
+//        show(y, "y = fft(x)");
+//
+//        long endTime=System.currentTimeMillis();
+//        Time=endTime-starTime;
+//        System.out.println(Time);
+//
+//        // take inverse FFT
+//        Complex[][] z = ifft2d(y);
+//        show(z, "z = ifft(y)");
+//        endTime=System.currentTimeMillis();
+//        Time=endTime-starTime;
+//        System.out.println(Time);
+//    }
 }

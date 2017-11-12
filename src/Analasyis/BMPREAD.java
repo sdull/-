@@ -1,6 +1,7 @@
 package Analasyis;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class BMPREAD {
 
@@ -25,15 +26,17 @@ public class BMPREAD {
     public BMPREAD(String path) throws IOException {
         this.path=path;
         readbmp();
+        datainput();
     }
     public void readbmp() throws IOException{
+        int tsize = 30246000; //
         java.io.FileInputStream fin = new java.io.FileInputStream(this.path);
         java.io.BufferedInputStream bis = new java.io.BufferedInputStream(fin);
-        byte[] imcon = new byte[1024600000];
+        byte[] imcon = new byte[tsize];
         bis.read(imcon);
-        this.imconr = new int[imcon.length];
+        this.imconr = new int[tsize];
         for (int i=0;i<this.imconr.length;i++){
-            if (this.imconr[i]<0) {
+            if (imcon[i]<0) {
                 this.imconr[i] = imcon[i]+256;
             }else{
                 this.imconr[i] = imcon[i];
@@ -43,7 +46,12 @@ public class BMPREAD {
         bis.close();
     }
     public int dataconvert(int[] type) {
-        int data = type[0] + type[1] << 8 + type[2] << 16 + type[3] << 24;
+        int data=0;
+        if (type.length==4) {
+            data = type[0] + (type[1] << 8) + (type[2] << 16) + (type[3] << 24);
+        }else {
+            data = type[0] + (type[1] << 8);
+        }
         return data;
     }
 
@@ -79,12 +87,28 @@ public class BMPREAD {
     public int get_biclrused(){return dataconvert(this.biclrused);}
     public int get_biclrimportant(){return dataconvert(this.biclrimportant);}
 
-    public void get_rgbdata(){
-        int width = get_biwidth();int height = get_biheight();
-        int scanbyte = ((width * height + 31) >> 5) << 2;
+    public HashMap<String,int[][]> get_rgbdata(){
+        int width = get_biwidth();
+        int height = get_biheight();
+        int biBitCount = get_bibitcount();
+        int scanbyte = (width*biBitCount+31)/32*4;
         this.rgbdata = new int[get_bfsize()-54];
-        System.arraycopy(this.imconr,53,rgbdata,0,this.rgbdata.length);
-        int[][] clrR;int[][] clrG;int[][] clrB;
-
+        System.arraycopy(this.imconr,54,rgbdata,0,this.rgbdata.length);
+        int[][] clrR=new int[height][width];
+        int[][] clrG=new int[height][width];
+        int[][] clrB=new int[height][width];
+        for (int i=0;i<rgbdata.length-scanbyte;i+=scanbyte){
+            int theight = height-i/scanbyte-1;
+            for (int j=0;j<scanbyte-3;j+=3){
+                clrB[theight][j/3]=rgbdata[i+j];
+                clrG[theight][j/3]=rgbdata[i+j+1];
+                clrR[theight][j/3]=rgbdata[i+j+2];
+            }
+        }
+        HashMap<String,int[][]> clrmap = new HashMap();
+        clrmap.put("clrB",clrB);
+        clrmap.put("clrR",clrR);
+        clrmap.put("clrG",clrG);
+        return clrmap;
     }
 }
