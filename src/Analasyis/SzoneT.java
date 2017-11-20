@@ -4,49 +4,50 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class SzoneT {
-
+    public BMPREAD rc;
     HashMap<String, int[][]> clrmap;
     int[][] clrR;
     int[][] clrG;
     int[][] clrB;
 
     public SzoneT(String path) throws IOException{
-        BMPREAD rc =new BMPREAD(path);
-        this.clrmap = rc.get_rgbdata();
-        this.clrR = this.clrmap.get("clrR");
-        this.clrG = this.clrmap.get("clrG");
-        this.clrB = this.clrmap.get("clrB");
+        rc =new BMPREAD(path);
+        clrmap = rc.get_rgbdata();
+        clrR = clrmap.get("clrR");
+        clrG = clrmap.get("clrG");
+        clrB = clrmap.get("clrB");
     }
-    public void mirror(String type){
+    public HashMap<String, int[][]> mirror(String type){
         HashMap<String, int[][]> clrmapM = new HashMap<>();
-        int r=this.clrR.length;int c=this.clrR[0].length;
-        int rr=r;int cc=c;
+        int r=clrR.length;int c=clrR[0].length;
+        int rr=r-1;int cc=0;
         int[][] clrR = new int[r][c];
         int[][] clrG = new int[r][c];
         int[][] clrB = new int[r][c];
-        switch (type){
-            case "level":
-                for(int i=0;i<r;i++){
-                    for(int j=0;j<c;j++){
-                        clrR[i][j]=this.clrR[i][--cc];
-                        clrG[i][j]=this.clrG[i][--cc];
-                        clrB[i][j]=this.clrB[i][--cc];
+
+                for(int i=0;i<r;i++) {
+                    cc = c - 1;
+                    for (int j = 0; j < c; j++) {
+                        switch (type) {
+                            case "level":
+                                clrR[i][j] = this.clrR[i][cc];
+                                clrG[i][j] = this.clrG[i][cc];
+                                clrB[i][j] = this.clrB[i][cc];
+                                cc--;
+                                continue;
+                            case "vertical":
+                                clrR[i][j] = this.clrR[rr][j];
+                                clrG[i][j] = this.clrG[rr][j];
+                                clrB[i][j] = this.clrB[rr][j];
+                                continue;
+                        }
                     }
+                    rr--;
                 }
-                break;
-            case "vertical":
-                for(int i=0;i<r;i++){
-                    for(int j=0;j<c;j++){
-                        clrR[i][j]=this.clrR[--rr][j];
-                        clrG[i][j]=this.clrG[--rr][j];
-                        clrB[i][j]=this.clrB[--rr][j];
-                    }
-                }
-                break;
-        }
-        clrmapM.put("clrB", this.clrB);
-        clrmapM.put("clrR", this.clrR);
-        clrmapM.put("clrG", this.clrG);
+        clrmapM.put("clrB", clrB);
+        clrmapM.put("clrR", clrR);
+        clrmapM.put("clrG", clrG);
+        return clrmapM;
     }
     public void panning(int X,int Y){
 
