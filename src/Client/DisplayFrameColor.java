@@ -1,31 +1,48 @@
 package Client;
 
-import java.awt.event.WindowAdapter;
-import java.awt.image.BufferedImage;
 import java.awt.Graphics;
-import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-
 import Analasyis.BMPREAD;
+import Analasyis.SzoneT;
 
 public class DisplayFrameColor extends JComponent{
     BufferedImage image;
-    BMPREAD rc = new BMPREAD("D:\\iamges\\timg.bmp");
+    BMPREAD rcb;
+    SzoneT rcs;
+    int width;
+    int height;
+    HashMap<String,int[][]> clrmap;
 
-    public DisplayFrameColor() throws IOException {
+    public DisplayFrameColor(String path) throws IOException {
+         rcs = new SzoneT(path);
+         width = rcs.rc.get_biwidth();
+         height = rcs.rc.get_biheight();
+         clrmap = rcs.mirror("vertical");
+    }
+
+    public void switchtype(String type){
+        switch (type){
+            case "max":
+                break;
+            case "average":
+                break;
+            case "weight":
+                break;
+            default:
+                break;
+        }
     }
 
     public void initialize() {
-        int width = rc.get_biwidth();
-        int height = rc.get_biheight();
         int[] data = new int[width * height];
         int index = 0;
-        int[][] clrR = rc.rgb2grayA().get("clrR");
-        int[][] clrG = rc.rgb2grayA().get("clrG");
-        int[][] clrB = rc.rgb2grayA().get("clrB");
+        int[][] clrR = clrmap.get("clrR");
+        int[][] clrG = clrmap.get("clrG");
+        int[][] clrB = clrmap.get("clrB");
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -42,20 +59,4 @@ public class DisplayFrameColor extends JComponent{
         g.drawImage(image, 0, 0, this);
     }
 
-    public static void main(String[] args) {
-        JFrame f = new JFrame("Display Colours");
-        try {
-            f.getContentPane().add(new DisplayFrameColor());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        f.setSize(900, 900);
-        f.setLocation(100, 100);
-        f.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
-        f.setVisible(true);
-    }
 }
