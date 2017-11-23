@@ -16,10 +16,10 @@ public class MAIN {
             DisplayFrameColor j2 =new DisplayFrameColor(path,"weight");
             j2.setBounds(0,450,700,400);
             DisplayFrameColor j3 =new DisplayFrameColor(path,"level");
-            j3.setBounds(800,0,700,400);
+            j3.setBounds(700,0,700,400);
             DisplayFrameColor j4 =new DisplayFrameColor(path,"vertical");
-            j4.setBounds(800,450,700,400);
-            f.setSize(1800, 900);
+            j4.setBounds(700,450,700,400);
+            f.setSize(1400, 900);
             f.add(j1);
             f.add(j2);
             f.add(j3);

@@ -5,34 +5,47 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.swing.JComponent;
-import Analasyis.BMPREAD;
+import javax.swing.JPanel;
+
 import Analasyis.SzoneT;
 
-public class DisplayFrameColor extends JComponent{
+public class DisplayFrameColor extends JPanel{
     BufferedImage image;
-    BMPREAD rcb;
     SzoneT rcs;
     int width;
     int height;
     HashMap<String,int[][]> clrmap;
+    String type;
+    String path;
 
-    public DisplayFrameColor(String path) throws IOException {
-         rcs = new SzoneT(path);
-         width = rcs.rc.get_biwidth();
-         height = rcs.rc.get_biheight();
-         clrmap = rcs.mirror("vertical");
+    public DisplayFrameColor(String path,String type) throws IOException {
+        this.type=type;
+        this.path=path;
+        rcs = new SzoneT(path);
+        width = rcs.rc.get_biwidth();
+        height = rcs.rc.get_biheight();
+        switchtype();
     }
 
-    public void switchtype(String type){
+    public void switchtype(){
         switch (type){
+            case "raw":
+                clrmap = rcs.rc.get_rgbdata();
+                break;
             case "max":
+                clrmap = rcs.rc.rgb2gray("max");
                 break;
             case "average":
+                clrmap = rcs.rc.rgb2gray("average");
                 break;
             case "weight":
+                clrmap = rcs.rc.rgb2gray("weight");
                 break;
-            default:
+            case "vertical":
+                clrmap = rcs.mirror("vertical");
+                break;
+            case "level":
+                clrmap = rcs.mirror("level");
                 break;
         }
     }
@@ -54,9 +67,11 @@ public class DisplayFrameColor extends JComponent{
     }
 
     public void paint(Graphics g) {
-        if (image == null)
-            initialize();
-        g.drawImage(image, 0, 0, this);
+        initialize();
+        if (image != null) {
+            g.drawImage(image, 0, 0, this);
+        }
     }
+
 
 }
